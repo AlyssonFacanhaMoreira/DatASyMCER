@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DatASyMCER</string>
+    <string name="title_activity_bluetooth_check">Lista de Dispositivos Bluetooth</string>
+    <string name="title_activity_bluetooth_search_devices">Procurar Dispositivos</string>
+
+    <string name="btConnect">Select Device</string>
+    <string name="btReconnect">Reconnect</string>
+
+    <string name="tvNomeDevice">No connection</string>
+
+    <string name="lvHeader">Buscar Novos Dispositivos</string>
+
+</resources>
