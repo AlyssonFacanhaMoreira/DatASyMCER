@@ -37,8 +37,8 @@
 
         <Button
             style="?attr/buttonBarButtonStyle"
-            android:id="@+id/btConnect"
-            android:clickable="false"
+            android:id="@+id/btSearchD"
+            android:enabled="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btConnect"
@@ -48,7 +48,6 @@
             style="?attr/buttonBarButtonStyle"
             android:id="@+id/btReconnect"
             android:enabled="false"
-            android:clickable="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btReconnect"

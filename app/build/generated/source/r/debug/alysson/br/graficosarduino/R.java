@@ -1329,8 +1329,8 @@ containing a value of this type.
         public static final int activity_chooser_view_content=0x7f080021;
         public static final int always=0x7f080016;
         public static final int beginning=0x7f080013;
-        public static final int btConnect=0x7f080043;
         public static final int btReconnect=0x7f080044;
+        public static final int btSearchD=0x7f080043;
         public static final int checkbox=0x7f080029;
         public static final int collapseActionView=0x7f080017;
         public static final int decor_content_parent=0x7f08002f;
@@ -1436,9 +1436,20 @@ containing a value of this type.
         public static final int btConnect=0x7f0a0011;
         public static final int btReconnect=0x7f0a0012;
         public static final int lvHeader=0x7f0a0013;
-        public static final int title_activity_bluetooth_check=0x7f0a0014;
-        public static final int title_activity_bluetooth_search_devices=0x7f0a0015;
-        public static final int tvNomeDevice=0x7f0a0016;
+        public static final int pdContent=0x7f0a0014;
+        public static final int pdTitle=0x7f0a0015;
+        public static final int title_activity_bluetooth_check=0x7f0a0016;
+        public static final int title_activity_bluetooth_search_devices=0x7f0a0017;
+        public static final int ttBlueC=0x7f0a0018;
+        public static final int ttBlueE=0x7f0a0019;
+        public static final int ttBlueP=0x7f0a001a;
+        public static final int ttBlueR=0x7f0a001b;
+        public static final int ttBlueU=0x7f0a001c;
+        public static final int ttFoundD=0x7f0a001d;
+        public static final int ttSearchE1=0x7f0a001e;
+        public static final int ttSearchE2=0x7f0a001f;
+        public static final int ttSearchS=0x7f0a0020;
+        public static final int tvNomeDevice=0x7f0a0021;
     }
     public static final class style {
         public static final int Animation_AppCompat_DropDownUp=0x7f0b0000;

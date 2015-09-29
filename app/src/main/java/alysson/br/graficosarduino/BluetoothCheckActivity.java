@@ -63,7 +63,7 @@ public class BluetoothCheckActivity extends MainActivity implements OnItemClickL
         }else{
 
             //Recupera o device selecionado
-            BluetoothDevice device = lista.get(idx);
+            BluetoothDevice device = lista.get(idx-1);
 
             // Cria a intent de resultado com o device selecionado
             Intent returnI = new Intent();

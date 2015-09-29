@@ -5,11 +5,38 @@
     <string name="title_activity_bluetooth_check">Lista de Dispositivos Bluetooth</string>
     <string name="title_activity_bluetooth_search_devices">Procurar Dispositivos</string>
 
-    <string name="btConnect">Select Device</string>
-    <string name="btReconnect">Reconnect</string>
+    <!-- MainActivity -->
+        <string name="tvNomeDevice">Sem conexão</string>
 
-    <string name="tvNomeDevice">No connection</string>
+        <string name="btConnect">Select Device</string>
+        <string name="btReconnect">Reconectar</string>
 
-    <string name="lvHeader">Buscar Novos Dispositivos</string>
+        <!-- Toast -->
+            <string name="ttBlueU">Bluetooth não presente</string>
+
+            <string name="ttBlueR">Ativação do Bluetooth é necessária</string>
+
+            <string name="ttBlueC">Estabelecendo conexão com:&#160;</string>
+
+            <string name="ttBlueE">Conexão estabelecida</string>
+
+            <string name="ttBlueP">Problemas com a conexão:&#160;</string>
+
+    <!-- BluetoothCheckActivity -->
+        <string name="lvHeader">Buscar Novos Dispositivos</string>
+
+    <!-- BluetoothSearchDevices -->
+
+        <!-- ProgressDialog -->
+            <string name="pdTitle">Aguarde</string>
+            <string name="pdContent">Buscando aparelhos bluetooth</string>
+    
+        <!-- Toast -->
+            <string name="ttFoundD">Encontrou:&#160;</string>
+
+            <string name="ttSearchS">Busca Iniciada</string>
+
+            <string name="ttSearchE1">Busca Finalizada.&#160;</string>
+            <string name="ttSearchE2">&#160;device(s) encontrado(s)</string>
 
 </resources>

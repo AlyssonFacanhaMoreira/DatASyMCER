@@ -171,11 +171,22 @@
     <eat-comment/>
     <string name="app_name">DatASyMCER</string>
     <string name="btConnect">Select Device</string>
-    <string name="btReconnect">Reconnect</string>
+    <string name="btReconnect">Reconectar</string>
     <string name="lvHeader">Buscar Novos Dispositivos</string>
+    <string name="pdContent">Buscando aparelhos bluetooth</string>
+    <string name="pdTitle">Aguarde</string>
     <string name="title_activity_bluetooth_check">Lista de Dispositivos Bluetooth</string>
     <string name="title_activity_bluetooth_search_devices">Procurar Dispositivos</string>
-    <string name="tvNomeDevice">No connection</string>
+    <string name="ttBlueC">Estabelecendo conexão com: </string>
+    <string name="ttBlueE">Conexão estabelecida</string>
+    <string name="ttBlueP">Problemas com a conexão: </string>
+    <string name="ttBlueR">Ativação do Bluetooth é necessária</string>
+    <string name="ttBlueU">Bluetooth não presente</string>
+    <string name="ttFoundD">Encontrou: </string>
+    <string name="ttSearchE1">Busca Finalizada. </string>
+    <string name="ttSearchE2"> device(s) encontrado(s)</string>
+    <string name="ttSearchS">Busca Iniciada</string>
+    <string name="tvNomeDevice">Sem conexão</string>
     <!-- From: file:/C:/Users/Alysson/Desktop/DatASyMCER/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/values/values.xml -->
     <eat-comment/>
     <style name="Animation.AppCompat.DropDownUp" parent="Base.Animation.AppCompat.DropDownUp"/>

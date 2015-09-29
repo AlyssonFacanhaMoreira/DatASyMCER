@@ -3,46 +3,47 @@ package alysson.br.graficosarduino;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.UUID;
 
 
 public class MainActivity extends ActionBarActivity {
 
+
+    // Bluetooth
     protected BluetoothAdapter btfAdapter;
-
-
-    private static final String TAG ="yopa";
-    //UUID para conexão
-    private static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private BluetoothDevice device;
-    private boolean running;
-    private OutputStream out;
-    private InputStream in;
     private BluetoothSocket socket;
-    Button btConnect,btReconnect;
+    private static final UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private InputStream inputStream;
+    // Bluetooth
 
+
+
+    // Widgets
     TextView tvNomeDevice;
-
+    Button btSearchD,btReconnect;
     WebView wvGraph;
+    // Widgets
+
+    private static final String TAG ="DatASyMCER";
+
+    private boolean running;
 
 
     @Override
@@ -50,29 +51,32 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Inicializando widgets
         tvNomeDevice = (TextView) findViewById(R.id.tvNomeDevice);
-        btConnect = (Button) findViewById(R.id.btConnect);
+        wvGraph = (WebView) findViewById(R.id.wvGraph);
+        btSearchD = (Button) findViewById(R.id.btSearchD);
         btReconnect = (Button) findViewById(R.id.btReconnect);
 
 
-        //Testando presença de bluetooth
         btfAdapter = BluetoothAdapter.getDefaultAdapter();
+        // Testando presença de bluetooth
         if(btfAdapter==null){
-            Toast.makeText(this,"Bluetooth não presente",Toast.LENGTH_SHORT).show();
+            makeToast(this, getString(R.string.ttBlueU), Toast.LENGTH_SHORT);
             finish();
         }
 
-        btConnect.setOnClickListener(new View.OnClickListener() {
+
+        // Listener do Botão SearchD
+        btSearchD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //if(device==null) {
-                    Intent buscaPareados = new Intent(MainActivity.this, BluetoothCheckActivity.class);
-                    startActivityForResult(buscaPareados, 1);
-
-                //}
+                running = false;
+                Intent buscaPareados = new Intent(MainActivity.this, BluetoothCheckActivity.class);
+                startActivityForResult(buscaPareados, 1);
             }
         });
 
+        // Listener do Botão Reconnect
         btReconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,29 +86,58 @@ public class MainActivity extends ActionBarActivity {
         });
 
 
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        // Ao reiniciar a aplicacao, checa se um device ja foi selecionado e ativa ou não a reconexao
         if(device!=null && socket!=null){
             btReconnect.setEnabled(true);
         }else{
             btReconnect.setEnabled(false);
         }
 
+
+        // Checa se o bluetooth esta ligado
         if(btfAdapter.isEnabled()){
-            //Toast.makeText(this,"Bluetooth ligado",Toast.LENGTH_SHORT).show();
-            btConnect.setClickable(true);
-            //checkDeviceStatus();
+
+            // Habilita a busca se verdadeiro
+            btSearchD.setEnabled(true);
+
         }else{
-            //Toast.makeText(this,"Bluetooth desligado",Toast.LENGTH_SHORT).show();
+
+            // Senão, requisita que o bluetoothe seja ligado
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent,0);
+
         }
 
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        running = false;
+
+        // Fecha o InputStream se não for nulo
+        try{
+            if(inputStream!=null){
+                inputStream.close();
+            }
+
+        }catch (IOException e){}
+
+        // Fecha o Socket se não for nulo
+        try{
+            if(socket!=null){
+                socket.close();
+            }
+
+        }catch (IOException e){}
     }
 
 
@@ -117,15 +150,24 @@ public class MainActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // Caso o usuário se recusar a ativar o bluetooth
         if(requestCode==0 && resultCode != RESULT_OK){
-            Toast.makeText(this,"Bluetooth Não foi ativado",Toast.LENGTH_SHORT).show();
-            btConnect.setClickable(true);
+
+            // Mostra uma mensagem e disabilita o botão btSearchD
+            makeToast(MainActivity.this,getString(R.string.ttBlueR),Toast.LENGTH_SHORT);
+            btSearchD.setEnabled(false);
+
         }
 
+        // Obtendo resultado de BlutoothCheckActivity
         if(requestCode==1 && resultCode == RESULT_OK){
+
+            // Armazena o device resultado
             device = data.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             setDeviceName(device.getName(),device.getAddress());
             btReconnect.setEnabled(true);
+
+            // Inicia a Thread de Conexão
             new ThreadClient().start();
             running=true;
         }
@@ -133,16 +175,25 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    private void makeToast(final String content, final int LENGTH){
+    /**
+     *
+     *      Inicio
+     * Funções de Interface
+     *
+     **/
+
+    // Função para mostrar mensagens
+    private void makeToast(final Context context,final String content, final int LENGTH){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(MainActivity.this, content,LENGTH).show();
+                Toast.makeText(context, content,LENGTH).show();
             }
         });
 
     }
 
+    // Função para por o nome do device conectado na TextView
     private void setDeviceName(final String name, final String address){
         runOnUiThread(new Runnable() {
             @Override
@@ -153,20 +204,20 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    // Função para habilitar a reconexão
     private void enableReconnection(){
 
         runOnUiThread(new Runnable() {
         @Override
         public void run() {
             tvNomeDevice.setText(getString(R.string.tvNomeDevice));
-            btReconnect.setClickable(true);
             btReconnect.setEnabled(true);
         }
     });
 
     }
 
-
+    // Função que configura e mostra o grafico
     private void loadChart(final String[] vals){
 
         runOnUiThread(new Runnable() {
@@ -176,16 +227,20 @@ public class MainActivity extends ActionBarActivity {
 
                 try {
 
+                    // Abre o html e chama a função para ler o arquivo
                     AssetManager assetManager = getAssets();
                     InputStream lcin = assetManager.open("grafico.html");
                     byte[] bytes = readHTML(lcin);
                     content = new String(bytes, "UTF-8");
 
+                    // Formata a string, adicionando os valores passados para função
                     final String formattedContent = String.format(content,
                             Float.parseFloat(vals[0]),
                             Float.parseFloat(vals[1]),
                             Float.parseFloat(vals[2]),
                             Float.parseFloat(vals[3]));
+
+                    // Carrega na WebView o conteudo formatado
                     wvGraph.loadDataWithBaseURL("file:///android_asset/", formattedContent, "text/html", "utf-8", null);
 
                 } catch (IOException e) {
@@ -197,6 +252,14 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    /**
+     *
+     *       Fim
+     * Funções de Interface
+     *
+     **/
+
+    // Função chamada para ler o HTML
     private static byte[] readHTML(InputStream in) throws IOException {
         ByteArrayOutputStream baout = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
@@ -207,73 +270,59 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        running = false;
-
-        try{
-            if(in!=null){
-                in.close();
-            }
-
-        }catch (IOException e){}
-
-        try{
-            if(socket!=null){
-                socket.close();
-            }
-
-        }catch (IOException e){}
-    }
-
 
     class  ThreadClient extends Thread {
 
         @Override
         public void run() {
-            //super.run();
+
             try{
-                makeToast("Estabelecendo Conexão Com: "+device.getName(),Toast.LENGTH_SHORT);
+
+                makeToast(MainActivity.this, getString(R.string.ttBlueC) +device.getName(),Toast.LENGTH_SHORT);
                 socket = device.createRfcommSocketToServiceRecord(uuid);
-                //Após essa linha esta conectado senão foi pra excessão
+
+                // Após essa linha esta conectado senão foi pra excessão
                 socket.connect();
                 if(socket.isConnected()){
-                    makeToast("Conexão Estabelecida",Toast.LENGTH_SHORT);
-                    //out = socket.getOutputStream();
 
-                    in = socket.getInputStream();
+                    // Avisa ao usuário que a conexão foi estabelecida
+                    makeToast(MainActivity.this, getString(R.string.ttBlueE),Toast.LENGTH_SHORT);
 
-
+                    //Objetos e variavel necessários para ler a mensagem
+                    inputStream = socket.getInputStream();
                     byte[] bytes = new byte[1024];
                     int length;
 
 
-                    //entra em loop esperando para ler a mensagem do microcontrolador
-
+                    // Entra em loop esperando para ler a mensagem do microcontrolador
                     while(running){
 
+                        // Inicia a leitura da mensagem
+                        length = inputStream.read(bytes);
 
+                        // As linhas abaixo só são executadas após a leitura da mensagem
 
-                            length = in.read(bytes);
-                            String values = new String(bytes, 0, length);
-                            String[] sValues = values.split("/");
-                            loadChart(sValues);
-                            values= null;
-                            sValues = null;
+                        // O conteudo da mensagem é guardado nessa variavel
+                        String values = new String(bytes, 0, length);
+                        // E separado nessa
+                        String[] sValues = values.split("/");
 
-
+                        // A função que mostra o grafico é chamada com os valores
+                        loadChart(sValues);
 
                     }
 
 
                 }
 
-
+            // Caso haja algum problema ao se conectar ou a conexão seja perdida
             }catch(IOException e){
-                makeToast("Problemas com a conexão: " + device.getName(), Toast.LENGTH_SHORT);
+
+                // Mostra uma mensagem avisando o usuário e reabilita a reconexão
+                makeToast(MainActivity.this, getString(R.string.ttBlueP) + device.getName(), Toast.LENGTH_SHORT);
                 enableReconnection();
                 running=false;
+
                 Log.e(TAG,"erro ao conectar: "+e.getMessage());
             }
             running=false;
