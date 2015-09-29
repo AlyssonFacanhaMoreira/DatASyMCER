@@ -77,7 +77,7 @@ public class BluetoothSearchDevices extends BluetoothCheckActivity {
                 dialog.dismiss();
 
                 //Atualiza o listview, e agora todos os devices pareados estarão la
-                updatelista();
+                updateList();
 
 
             }

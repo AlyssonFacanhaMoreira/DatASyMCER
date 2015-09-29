@@ -76,7 +76,7 @@ public class MainActivity extends ActionBarActivity {
         btReconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ThreadCliente().start();
+                new ThreadClient().start();
                 running = true;
             }
         });
@@ -126,7 +126,7 @@ public class MainActivity extends ActionBarActivity {
             device = data.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             setDeviceName(device.getName(),device.getAddress());
             btReconnect.setEnabled(true);
-            new ThreadCliente().start();
+            new ThreadClient().start();
             running=true;
         }
 
@@ -228,7 +228,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    class  ThreadCliente extends Thread {
+    class  ThreadClient extends Thread {
 
         @Override
         public void run() {
