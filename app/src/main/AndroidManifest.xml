@@ -12,11 +12,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <android:uses-permission
+
+    <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 
@@ -38,12 +39,6 @@
         <activity
             android:name=".BluetoothCheckActivity"
             android:label="@string/title_activity_bluetooth_check"
-            android:configChanges="orientation|screenSize"
-            >
-        </activity>
-        <activity
-            android:name=".BluetoothSearchDevices"
-            android:label="@string/title_activity_bluetooth_search_devices"
             android:configChanges="orientation|screenSize"
             >
         </activity>
