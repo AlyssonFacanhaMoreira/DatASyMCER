@@ -6,8 +6,8 @@ O sistema consiste em um circuito que utiliza o microcontrolador Arduino para ca
 
 ### Pre-requisitos
 
-Android Studio
-Dispositivo Android 2.3+
+* Android Studio
+* Dispositivo Android 2.3+
 
 ### Instalação
 
